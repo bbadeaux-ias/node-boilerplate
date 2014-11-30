@@ -31,11 +31,14 @@ var Config = function(){
  		resave: true	
 	};
 	this.winston = {
+		consoleLevel: "debug",
 		transports: [
 	 			{
 	 				type: "File",
 	 				options: {
-	 					fileName: new Date().toString() + ".log"
+	 					filename: __dirname + "/../logs/server.log",
+	 					level: "debug",
+	 					colorize: true
 	 				}
 	 			}
 	 		]

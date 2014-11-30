@@ -20,6 +20,17 @@ var express = require("express"),
 global.config = config;
 global.environment = env;
 
+var log = require("./lib/server/utils/logger");
+
+/**
+ * Below are all avilable log levels when requiring the logger utility:
+ * @example 
+ *   log.debug("Testing winston logger");
+ *   log.info("Testing winston logger");
+ *   log.warn("Testing winston logger");
+ *   log.error("Testing winston logger");
+ */
+
 /**
  * Create a redis store for app sessions.
  */
@@ -49,15 +60,15 @@ app.use(session(sessionOptions));
  * Set event listeners for Redis to monitor it's state.
  */
 RedisClient.on("ready", function(){
-	console.log("Connection to Redis established on port " + config.redis.port);
+	log.info("Connection to Redis established on port " + config.redis.port);
 	app.set("redisStatus", "Connected");
 });
 RedisClient.on("error", function(){
-	console.error("Unable to establish connection with Redis");
+	log.error("Unable to establish connection with Redis");
 	app.set("redisStatus", "Disconnected");
 });
 RedisClient.on("end", function(){
-	console.warn("Connection with Redis was terminated");
+	log.warn("Connection with Redis was terminated");
 	app.set("redisStatus", "Disconnected");
 });
 
@@ -70,5 +81,5 @@ require("./lib/server/routes/urlMap")(app);
  * Set the app to listen for requests in the port set in the selected configuration.
  */
 app.listen(config.server.port, function(){
-	console.log("Server listening on port " + config.server.port);
+	log.info("Server listening on port " + config.server.port);
 });
