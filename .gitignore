@@ -3,3 +3,6 @@ node_modules
 
 # Ignore static directory
 static
+
+# Ignore logs
+logs

@@ -6,7 +6,8 @@
 
 var express = require("express"),
 	app = express(),
-	config = require("./config/default"),
+	env = !!process.env.APP_ENV ? process.env.APP_ENV : "default",
+	config = require("./config/" + env),
 	redis = require("redis"),
 	session = require("express-session"),
 	RedisStore = require("connect-redis")(session),
@@ -16,8 +17,8 @@ var express = require("express"),
 		config.redis.options
 		),
 	sessionOptions = config.session;
-
-app.set("environment", "default");
+global.config = config;
+global.environment = env;
 
 /**
  * Create a redis store for app sessions.
