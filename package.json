@@ -1,0 +1,18 @@
+{
+  "name": "NodeBoilerplate",
+  "description": "A framework for getting started quickly with new projects in node.js",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "connect-redis": "^2.1.0",
+    "express": "4.8.7",
+    "express-session": "^1.9.2",
+    "jade": "^1.7.0",
+    "redis": "^0.12.1"
+  },
+  "devDependencies": {
+    "del": "^0.1.3",
+    "gulp": "^3.8.10",
+    "gulp-less": "^1.3.6"
+  }
+}
