@@ -15,5 +15,3 @@ The logs directory isn't tracked so you'll need to cd into node-boilerplate and
     cd logs
     vim server.log
     :wq
-
-Testing configuration
