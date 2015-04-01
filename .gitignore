@@ -6,3 +6,6 @@ static
 
 # Ignore logs
 logs
+
+# Ignore Intellij config files
+.idea
