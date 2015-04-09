@@ -12,10 +12,12 @@ Added express, jade templates, gulp, bootstrap, and redis.
 The logs directory isn't tracked so you'll need to cd into node-boilerplate and
 
     ```
+
     mkdir logs
     cd logs
     vim server.log
     :wq
+
     ```
 
 ### Self-signed ssl certificate generation
@@ -46,13 +48,16 @@ In case running the application over https is necessary, here are the instructio
     ```
 
 
-4. When you have the certificate request create the ssl certificate:
+4. Fill the required fields as requested in the terminal until the request is created.
+
+
+5. When you have the certificate request create the ssl certificate:
+
 
     ```
     sudo openssl x509 -req -days 365 -in request.csr -signkey host.key -out server.crt
     ```
 
-5. Fill the required fields as requested in the terminal until the certificate is created.
 
 6. To enable https in node, make sure the following lines are included in app.js:
 
@@ -70,7 +75,7 @@ In case running the application over https is necessary, here are the instructio
     httpsServer.listen(3443);                                     //enables https server connections in https://localhost:3443
     ```
 
-7. In some cases, you'll need to update the permissions to the ssl directory so that node has access to it's information:
+7. In some cases, you'll need to update the permissions to the ssl directory so that node has access to its information:
 
     ```
     sudo chmod -R a+r ssl

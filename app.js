@@ -5,10 +5,13 @@
 "use strict";
 
 var express = require("express"),
-	app = express(),
+	fs = require("fs"),
+  app = express(),
 	env = !!process.env.APP_ENV ? process.env.APP_ENV : "default",
 	config = require("./config/" + env),
 	redis = require("redis"),
+  server = config.isHttps ? require("https") : require("http"),
+  credentials = {},
 	session = require("express-session"),
 	RedisStore = require("connect-redis")(session),
 	RedisClient = redis.createClient(
@@ -20,10 +23,15 @@ var express = require("express"),
 global.config = config;
 global.environment = env;
 
+if(config.isHttps){
+  credentials.key = fs.readFileSync(config.credentials.keyPath, "utf8");
+  credentials.cert = fs.readFileSync(config.credentials.certPath, "utf8");
+}
+
 var log = require("./lib/server/utils/logger");
 
 /**
- * Below are all avilable log levels when requiring the logger utility:
+ * Below are all available log levels when requiring the logger utility:
  * @example 
  *   log.debug("Testing winston logger");
  *   log.info("Testing winston logger");
@@ -80,6 +88,9 @@ require("./lib/server/routes/urlMap")(app);
 /**
  * Set the app to listen for requests in the port set in the selected configuration.
  */
-app.listen(config.server.port, function(){
+
+var serverInstance = config.isHttps ? server.createServer(credentials, app) : server.createServer(app);
+
+serverInstance.listen(config.server.port, function(){
 	log.info("Server listening on port " + config.server.port);
 });

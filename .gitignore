@@ -9,3 +9,6 @@ logs
 
 # Ignore Intellij config files
 .idea
+
+# ssl certificates
+ssl
