@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/server/utils/logger</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="lib/server/utils/logger"><meta name="groc-project-path" content="lib/server/utils/logger.js"><meta name="groc-github-url" content="https://github.com/ruedamanuel/node-boilerplate"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/ruedamanuel/node-boilerplate/blob/master/lib/server/utils/logger.js">lib/server/utils/logger.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="log-utility">Log Utility</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">"use strict"</span>;
+
+<span class="hljs-keyword">var</span> winston = <span class="hljs-built_in">require</span>(<span class="hljs-string">"winston"</span>);
+winston.setLevels({
+	silly: <span class="hljs-number">0</span>,
+	debug: <span class="hljs-number">1</span>,
+	verbose: <span class="hljs-number">2</span>,
+	info: <span class="hljs-number">3</span>,
+	warn: <span class="hljs-number">4</span>,
+	error: <span class="hljs-number">5</span>
+});
+winston.addColors({
+	silly: <span class="hljs-string">"white"</span>,
+	debug: <span class="hljs-string">"cyan"</span>,
+	verbose: <span class="hljs-string">"white"</span>,
+	info: <span class="hljs-string">"green"</span>,
+	warn: <span class="hljs-string">"yellow"</span>,
+	error: <span class="hljs-string">"red"</span>
+});
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+			level: global.config.winston.consoleLevel,
+			colorize: <span class="hljs-literal">true</span>
+		});
+<span class="hljs-keyword">if</span> (global.config.winston.transports.length &gt; <span class="hljs-number">0</span>) {
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>; i &lt; global.config.winston.transports.length; i += <span class="hljs-number">1</span>){
+		<span class="hljs-keyword">try</span> {
+			winston.add(winston.transports[global.config.winston.transports[i].type], 
+				!!global.config.winston.transports[i].options ? global.config.winston.transports[i].options : <span class="hljs-literal">null</span>
+			);
+		} <span class="hljs-keyword">catch</span>(error){
+			<span class="hljs-built_in">console</span>.error(error);
+		}
+	}
+}
+
+<span class="hljs-built_in">module</span>.exports = winston;</div></div></div></div></body></html>

@@ -1,0 +1,14 @@
+# Ignore node modules
+node_modules
+
+# Ignore static directory
+static
+
+# Ignore logs
+logs
+
+# Ignore Intellij config files
+.idea
+
+# ssl certificates
+ssl
