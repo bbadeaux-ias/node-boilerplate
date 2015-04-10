@@ -4,74 +4,113 @@
 
  "use strict";
 
+/**
+ * Gulp Dependencies
+ */
 var gulp = require("gulp"),
-   	autoprefixer = require("gulp-autoprefixer"),
-    	minifycss = require("gulp-minify-css"),
-    	jshint = require("gulp-jshint"),
-    	uglify = require("gulp-uglify"),
-    	less = require("gulp-less"),
-    	imagemin = require("gulp-imagemin"),
-    	rename = require("gulp-rename"),
-    	concat = require("gulp-concat"),
-    	notify = require("gulp-notify"),
-    	cache = require("gulp-cache"),
-    	livereload = require("gulp-livereload"),
-    	del = require("del"),
- 	bootstrapPath = __dirname + "/lib/client/bootstrap-3.3.1";
+  rename = require("gulp-rename");
 
-gulp.task("scripts", function() {
-	return gulp.src(__dirname + "/lib/client/scripts/**/*.js")
-		.pipe(jshint(".jshintrc"))
-		.pipe(jshint.reporter("default"))
-		.pipe(concat("main.js"))
-		.pipe(gulp.dest(__dirname + "/static/js"))
-		.pipe(rename({suffix: ".min"}))
-		.pipe(uglify())
-		.pipe(gulp.dest(__dirname + "/static/js"))
-		.pipe(notify({ message: "Scripts task complete" }));
-});
- 
-gulp.task("less:bootstrap", function(){
-	return gulp.src([bootstrapPath + "/less/bootstrap.less"])
-		.pipe(less())
-		.pipe(gulp.dest(__dirname + "/static/css"));
-});
+/**
+ * Build Dependencies
+ */
+var browserify = require("gulp-browserify"),
+  uglify = require("gulp-uglify");
 
-gulp.task("less:theme", function(){
-	return gulp.src([bootstrapPath + "/less/theme.less"])
-		.pipe(less())
-		.pipe(gulp.dest(__dirname + "/static/css"));
+/**
+ * Style Dependencies
+ */
+var less = require("gulp-less"),
+  prefix = require("gulp-autoprefixer"),
+  minifyCSS = require("gulp-minify-css");
+
+/**
+ * Dev Dependencies
+ */
+var jshint = require("gulp-jshint");
+
+/**
+ * Test Dependencies
+ */
+var mochaPhantomjs = require("gulp-mocha-phantomjs");
+
+/**
+ * JSHINT tasks
+ */
+gulp.task("lint-client", function() {
+  return gulp.src("./lib/client/scripts/**/*.js")
+    .pipe(jshint())
+    .pipe(jshint.reporter("default"));
 });
 
-gulp.task("less:custom", function(){
-	return gulp.src([__dirname + "/lib/client/less/**.less"])
-		.pipe(less())
-		.pipe(gulp.dest(__dirname + "/static/css"));
+gulp.task("lint-test-client", function() {
+  return gulp.src("./lib/test/client/**/*.js")
+    .pipe(jshint())
+    .pipe(jshint.reporter("default"));
 });
 
-gulp.task("copy:js", function(){
-	return gulp.src([bootstrapPath + "/dist/js/bootstrap.min.js"])
-.		pipe(gulp.dest(__dirname + "/static/js"));
+/**
+ * Browserify tasks
+ */
+gulp.task("browserify-client", ["lint-client"], function() {
+  return gulp.src("./lib/client/scripts/index.js")//TODO: Add this file
+    .pipe(browserify({
+      insertGlobals: true
+    }))
+    .pipe(rename("main.js"))
+    .pipe(gulp.dest("./static/js"));
 });
 
-gulp.task("copy:fonts", function(){
-	return gulp.src([bootstrapPath + "/dist/fonts/*"])
-		.pipe(gulp.dest(__dirname + "/static/fonts"));
+gulp.task("browserify-test", ["lint-test-client"], function() {
+  return gulp.src("./lib/test/client/index.js")
+    .pipe(browserify({
+      insertGlobals: true
+    }))
+    .pipe(rename("client-test.js"))
+    .pipe(gulp.dest("./static/test"));
 });
 
-gulp.task("clean", function(cb) {
-	del([__dirname + "/static"], cb)
+/**
+ * Testing tasks
+ */
+gulp.task("test", ["lint-test-client", "browserify-test"], function() {
+  return gulp.src("./lib/test/client/index.html")
+    .pipe(mochaPhantomjs({reporter: "spec", dump:"./logs/test.log"}));
 });
 
+/**
+ * Asset building tasks
+ */
+gulp.task("styles", function() {
+  return gulp.src("./lib/client/less/main.less")
+    .pipe(less())
+    .pipe(prefix({ cascade: true }))
+    .pipe(rename("main.css"))
+    .pipe(gulp.dest("./static/css"));
+});
+
+gulp.task("minify", ["styles"], function() {
+  return gulp.src("./static/css/main.css")
+    .pipe(minifyCSS())
+    .pipe(rename("main.min.css"))
+    .pipe(gulp.dest("./static/css"));
+});
+
+/**
+ * Client Watch
+ */
 gulp.task("watch", function() {
-	// Watch .less files
-	gulp.watch(__dirname + "/lib/client/less/**/*.less", ["less:custom"]);
-
-	// Watch .js files
-	gulp.watch(__dirname + "/lib/client/scripts/**/*.js", ["scripts"]);
+  gulp.watch("./lib/client/less/**/*.less", ["minify"]);
+  gulp.watch("./lib/client/scripts/**/*.js", ["browserify-client", "test"]);
+  gulp.watch("./lib/test/client/**/*.js", ["test"]);
 });
 
-gulp.task("default", ["clean"], function() {
-	gulp.start("scripts", "copy:js", "copy:fonts", "less:bootstrap", "less:theme", "less:custom", "watch");
+gulp.task("uglify", ["browserify-client"], function() {
+  return gulp.src("./static/js/main.js")
+    .pipe(uglify())
+    .pipe(rename("main.min.js"))
+    .pipe(gulp.dest("./static/js"));
 });
 
+gulp.task("build", ["uglify", "minify"]);
+
+gulp.task("default", ["test", "build", "watch"]);
