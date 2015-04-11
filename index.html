@@ -1,9 +1,61 @@
-<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="lib/client/scripts/index.js"><meta name="groc-github-url" content="https://github.com/ruedamanuel/node-boilerplate"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/ruedamanuel/node-boilerplate/blob/master/lib/client/scripts/index.js">lib/client/scripts/index.js</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="client-js-index">Client JS Index</h1></div></div></div><div class="segment"><div class="code"><div class="wrapper">(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
-<span class="hljs-pi">
-  "use strict"</span>;
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><meta name="groc-github-url" content="https://github.com/ruedamanuel/node-boilerplate"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/ruedamanuel/node-boilerplate/blob/master/README.md">README.md</a></div></div><div id="document"><div class="segment"><div class="comments "><div class="wrapper"><h1 id="node-boilerplate">node-boilerplate</h1>
+<p>A framework of default libraries for starting a project.</p>
+<h1 id="current-state">Current state</h1>
+<p>Added express, jade templates, gulp, bootstrap, and redis.</p>
+<h3 id="note">Note</h3>
+<p>The logs directory isn&#39;t tracked so you&#39;ll need to cd into node-boilerplate and</p>
+<pre><code>```
 
-  <span class="hljs-keyword">var</span> test = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./samples/test"</span>),
-    test2 = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./samples/test2"</span>);
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Tests: "</span>, test, test2);
+mkdir logs
+cd logs
+vim server.log
+:wq
 
-})();</div></div></div></div></body></html>
+```</code></pre>
+<h3 id="self-signed-ssl-certificate-generation">Self-signed ssl certificate generation</h3>
+<p>In case running the application over https is necessary, here are the instructions to generate a self signed certificate:</p>
+<ol>
+<li>In your project directory, create a directory called ssl</li>
+</ol>
+<pre><code>```
+mkdir ssl
+```</code></pre>
+<ol>
+<li>cd into ssl and type:</li>
+</ol>
+<pre><code>```
+sudo ssh-keygen -f host.key
+```</code></pre>
+<ol>
+<li>Once the key is created, generate a certificate request file:</li>
+</ol>
+<pre><code>```
+sudo openssl req -new -key host.key -out request.csr
+```</code></pre>
+<ol>
+<li>Fill the required fields as requested in the terminal until the request is created.</li>
+</ol>
+<ol>
+<li>When you have the certificate request create the ssl certificate:</li>
+</ol>
+<pre><code>```
+sudo openssl x509 -req -days 365 -in request.csr -signkey host.key -out server.crt
+```</code></pre>
+<ol>
+<li><p>To enable https in node, make sure the following lines are included in app.js:</p>
+<pre><code class="lang-javascript"> <span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>),                                           <span class="hljs-comment">//includes the file system package</span>
+     https = <span class="hljs-built_in">require</span>(<span class="hljs-string">'https'</span>),                                     <span class="hljs-comment">//includes the https package</span>
+     privateKey = fs.readFileSync(<span class="hljs-string">'./ssl/host.key'</span>, <span class="hljs-string">'utf8'</span>),       <span class="hljs-comment">//reads the recently created ssl key</span>
+     certificate = fs.readFileSync(<span class="hljs-string">'./ssl/server.crt'</span>, <span class="hljs-string">'utf8'</span>),    <span class="hljs-comment">//reads the ssl certificate</span>
+     credentials = {key: privateKey, cert: certificate};           <span class="hljs-comment">//puts the key and certificate in the right format for the https package to read them</span>
+
+ <span class="hljs-keyword">var</span> app = express();                                          <span class="hljs-comment">//...configure express</span>
+
+ <span class="hljs-keyword">var</span> httpsServer = https.createServer(credentials, app);       <span class="hljs-comment">//creates an https server instance with the assigned credentials</span>
+
+ httpsServer.listen(<span class="hljs-number">3443</span>);                                     <span class="hljs-comment">//enables https server connections in https://localhost:3443</span></code></pre>
+</li>
+<li><p>In some cases, you&#39;ll need to update the permissions to the ssl directory so that node has access to its information:</p>
+<pre><code> sudo chmod -R a+r ssl</code></pre>
+</li>
+</ol></div></div></div></div></body></html>
