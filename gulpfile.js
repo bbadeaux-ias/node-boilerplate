@@ -66,7 +66,7 @@ gulp.task("browserify-client", ["lint-client"], function() {
 });
 
 gulp.task("browserify-test", ["lint-test-client"], function() {
-  return gulp.src("./lib/test/client/client.js")
+  return gulp.src("./lib/test/client/index.js")
     .pipe(browserify({
       insertGlobals: true
     }))
