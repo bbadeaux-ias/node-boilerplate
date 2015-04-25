@@ -17,9 +17,49 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
         "projectPath": "README.md",
         "targetPath": "index",
         "pageTitle": "index",
-        "title": "index"
+        "firstHeader": {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "node-boilerplate",
+            "slug": "node-boilerplate",
+            "isFileHeader": true
+          },
+          "depth": 1
+        },
+        "title": "node-boilerplate"
       },
-      "depth": 1
+      "depth": 1,
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Current state",
+            "slug": "current-state"
+          },
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Note",
+                "slug": "note"
+              },
+              "depth": 3
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 3,
+                "title": "Self-signed ssl certificate generation",
+                "slug": "self-signed-ssl-certificate-generation"
+              },
+              "depth": 3
+            }
+          ]
+        }
+      ]
     }, {
       "type": "file",
       "data": {
@@ -36,9 +76,20 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
         "projectPath": "lib/client/scripts/client.js",
         "targetPath": "client",
         "pageTitle": "client",
-        "title": "client"
+        "firstHeader": {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "Client JS Index",
+            "slug": "client-js-index",
+            "isFileHeader": true
+          },
+          "depth": 1
+        },
+        "title": "Client JS Index"
       },
-      "depth": 1
+      "depth": 1,
+      "outline": []
     }, {
       "type": "folder",
       "data": {
@@ -81,7 +132,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                     "pageTitle": "lib/client/less/main",
                     "title": "main"
                   },
-                  "depth": 4
+                  "depth": 4,
+                  "outline": []
                 }
               ]
             }
@@ -118,9 +170,20 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                     "projectPath": "lib/server/routes/landing.js",
                     "targetPath": "lib/server/routes/landing",
                     "pageTitle": "lib/server/routes/landing",
-                    "title": "landing"
+                    "firstHeader": {
+                      "type": "heading",
+                      "data": {
+                        "level": 1,
+                        "title": "Landing Routes",
+                        "slug": "landing-routes",
+                        "isFileHeader": true
+                      },
+                      "depth": 1
+                    },
+                    "title": "Landing Routes"
                   },
-                  "depth": 4
+                  "depth": 4,
+                  "outline": []
                 }, {
                   "type": "file",
                   "data": {
@@ -137,9 +200,20 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                     "projectPath": "lib/server/routes/urlMap.js",
                     "targetPath": "lib/server/routes/urlMap",
                     "pageTitle": "lib/server/routes/urlMap",
-                    "title": "urlMap"
+                    "firstHeader": {
+                      "type": "heading",
+                      "data": {
+                        "level": 1,
+                        "title": "URL Map",
+                        "slug": "url-map",
+                        "isFileHeader": true
+                      },
+                      "depth": 1
+                    },
+                    "title": "URL Map"
                   },
-                  "depth": 4
+                  "depth": 4,
+                  "outline": []
                 }
               ]
             }, {
@@ -166,9 +240,20 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                     "projectPath": "lib/server/utils/logger.js",
                     "targetPath": "lib/server/utils/logger",
                     "pageTitle": "lib/server/utils/logger",
-                    "title": "logger"
+                    "firstHeader": {
+                      "type": "heading",
+                      "data": {
+                        "level": 1,
+                        "title": "Log Utility",
+                        "slug": "log-utility",
+                        "isFileHeader": true
+                      },
+                      "depth": 1
+                    },
+                    "title": "Log Utility"
                   },
-                  "depth": 4
+                  "depth": 4,
+                  "outline": []
                 }
               ]
             }
@@ -199,9 +284,20 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/client/scripts/samples/test.js",
             "targetPath": "samples/test",
             "pageTitle": "samples/test",
-            "title": "test"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Sample script",
+                "slug": "sample-script",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Sample script"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": []
         }, {
           "type": "file",
           "data": {
@@ -218,9 +314,20 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "projectPath": "lib/client/scripts/samples/test2.js",
             "targetPath": "samples/test2",
             "pageTitle": "samples/test2",
-            "title": "test2"
+            "firstHeader": {
+              "type": "heading",
+              "data": {
+                "level": 1,
+                "title": "Sample script 2",
+                "slug": "sample-script-2",
+                "isFileHeader": true
+              },
+              "depth": 1
+            },
+            "title": "Sample script 2"
           },
-          "depth": 2
+          "depth": 2,
+          "outline": []
         }
       ]
     }
