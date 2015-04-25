@@ -31,7 +31,8 @@ var jshint = require("gulp-jshint");
 /**
  * Test Dependencies
  */
-var mochaPhantomjs = require("gulp-mocha-phantomjs");
+var mochaPhantomjs = require("gulp-mocha-phantomjs"),
+  mocha = require("gulp-mocha");
 
 /**
  * JSHINT tasks
@@ -53,11 +54,17 @@ gulp.task("lint-server", function() {
     .pipe(jshint())
     .pipe(jshint.reporter("default"));
 });
+
+gulp.task("lint-test-server", function() {
+  return gulp.src("./lib/test/server/**/*.js")
+    .pipe(jshint())
+    .pipe(jshint.reporter("default"));
+});
 /**
  * Browserify tasks
  */
 gulp.task("browserify-client", ["lint-client"], function() {
-  return gulp.src("./lib/client/scripts/client.js")//TODO: Add this file
+  return gulp.src("./lib/client/scripts/client.js")
     .pipe(browserify({
       insertGlobals: true
     }))
@@ -77,9 +84,17 @@ gulp.task("browserify-test", ["lint-test-client"], function() {
 /**
  * Testing tasks
  */
-gulp.task("test", ["lint-test-client", "browserify-test"], function() {
+gulp.task("test-client", ["lint-test-client", "browserify-test"], function() {
   return gulp.src("./lib/test/client/index.html")
-    .pipe(mochaPhantomjs({reporter: "spec", dump:"./logs/test.log"}));
+    .pipe(mochaPhantomjs({reporter: "spec", dump:"./logs/test-client.log"}));
+});
+
+gulp.task("test-server", ["lint-test-server"], function() {
+  return gulp.src("./lib/test/server/index.js")
+    .pipe(mocha({
+      reporter: "spec",
+      ui: "bdd"
+    }));
 });
 
 /**
@@ -105,9 +120,10 @@ gulp.task("minify", ["styles"], function() {
  */
 gulp.task("watch", function() {
   gulp.watch("./lib/client/less/**/*.less", ["minify"]);
-  gulp.watch("./lib/client/scripts/**/*.js", ["browserify-client", "test"]);
-  gulp.watch("./lib/test/client/**/*.js", ["test"]);
-  gulp.watch("./lib/server/**/*.js", ["lint-server"]);
+  gulp.watch("./lib/client/scripts/**/*.js", ["browserify-client", "test-client"]);
+  gulp.watch("./lib/test/client/**/*.js", ["test-client"]);
+  gulp.watch("./lib/server/**/*.js", ["lint-server", "test-server"]);
+  gulp.watch("./lib/test/server/**/*.js", ["test-server"]);
 });
 
 gulp.task("uglify", ["browserify-client"], function() {
@@ -117,6 +133,8 @@ gulp.task("uglify", ["browserify-client"], function() {
     .pipe(gulp.dest("./static/js"));
 });
 
+gulp.task("test", ["test-server", "test-client"]);
+
 gulp.task("build", ["lint-server", "uglify", "minify"]);
 
-gulp.task("default", ["test", "build", "watch"]);
+gulp.task("default", ["test-server", "test-client", "build", "watch"]);
